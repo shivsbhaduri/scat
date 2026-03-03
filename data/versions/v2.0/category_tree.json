@@ -1,0 +1,720 @@
+{
+    "schema_name": "sme_transaction_categories_uk",
+    "schema_version": "2.0",
+    "reference_currency": "GBP",
+    "market": "UK",
+    "last_updated": "2025-02-25",
+    "purpose": {
+        "primary_objective": "Provide consistent economic categorisation of SME bank transactions to support explainable credit analytics, monitoring, and scoring for UK businesses.",
+        "design_principles": [
+            "Flat economic categories optimised for credit metrics, not nested P&L hierarchy",
+            "One transaction maps to one category only - no double counting",
+            "Clear separation of trading income from non-trading inflows",
+            "People costs, finance costs, and transport isolated for intensity metrics",
+            "Balance sheet movements excluded from operating margin calculations",
+            "Transaction direction (DEBIT/CREDIT) explicit for each category",
+            "Every category includes synthetic prompt guidance for LLM-generated test data",
+            "UK market specific: HMRC, VAT, UK merchants, UK payment rails"
+        ]
+    },
+    "classification_guidance": {
+        "confidence_thresholds": {
+            "high": {
+                "min_score": 0.85,
+                "description": "Exact merchant match, unambiguous pattern, known counterparty"
+            },
+            "medium": {
+                "min_score": 0.60,
+                "description": "Semantic match, probable intent, contextual inference"
+            },
+            "low": {
+                "min_score": 0.00,
+                "description": "Ambiguous description, unclear intent, requires manual review"
+            }
+        },
+        "fallback_strategy": "Assign to UNCATEGORISED with confidence score below 0.60. Flag for manual review in credit assessment. Exclude from automated metric calculations."
+    },
+    "derived_metrics": {
+        "revenue": {
+            "formula": "SUM(REVENUE categories where transaction_direction = CREDIT) - SUM(refunds_issued)",
+            "included_categories": [
+                "card_payments",
+                "bank_transfers_in",
+                "platform_payouts",
+                "cash_deposits",
+                "other_revenue"
+            ],
+            "excluded_categories": [
+                "refunds_issued",
+                "chargebacks"
+            ],
+            "description": "Total trading income from core business activities, net of refunds and chargebacks",
+            "unit": "GBP"
+        },
+        "non_revenue_inflows": {
+            "formula": "SUM(NON_REVENUE_INFLOWS categories where transaction_direction = CREDIT)",
+            "included_categories": [
+                "grants_subsidies",
+                "insurance_claims",
+                "refunds_received",
+                "asset_sale_proceeds"
+            ],
+            "description": "Inflows that are not trading revenue and should be excluded from turnover",
+            "unit": "GBP"
+        },
+        "cogs": {
+            "formula": "SUM(COST_OF_SALES categories where transaction_direction = DEBIT)",
+            "included_categories": [
+                "inventory_wholesale",
+                "raw_materials",
+                "subcontractors",
+                "shipping_fulfilment",
+                "platform_fees"
+            ],
+            "description": "Direct costs to produce or deliver goods and services sold",
+            "unit": "GBP"
+        },
+        "gross_profit": {
+            "formula": "revenue - cogs",
+            "description": "Profit after direct production costs, before operating expenses",
+            "unit": "GBP"
+        },
+        "gross_margin": {
+            "formula": "(revenue - cogs) / revenue",
+            "description": "Gross profit as a percentage of revenue, indicator of pricing power and production efficiency",
+            "unit": "percentage",
+            "interpretation": {
+                "healthy": "> 40% for service businesses, > 25% for retail/wholesale",
+                "warning": "< 20% suggests pricing pressure or high input costs",
+                "critical": "< 10% indicates severe margin compression"
+            }
+        },
+        "total_operating_costs": {
+            "formula": "SUM(OPERATING_EXPENSES + PEOPLE_COSTS + FINANCE_COSTS + TRANSPORT_AND_LOGISTICS + INSURANCE)",
+            "included_categories": [
+                "All subcategories under OPERATING_EXPENSES",
+                "All subcategories under PEOPLE_COSTS",
+                "All subcategories under FINANCE_COSTS",
+                "All subcategories under TRANSPORT_AND_LOGISTICS",
+                "All subcategories under INSURANCE"
+            ],
+            "description": "Total overhead and operational spend excluding COGS",
+            "unit": "GBP"
+        },
+        "ebitda": {
+            "formula": "gross_profit - total_operating_costs",
+            "description": "Earnings Before Interest, Tax, Depreciation and Amortisation. Proxy for operational cash generation.",
+            "unit": "GBP",
+            "notes": "Interest is excluded (captured in FINANCE_COSTS but not deducted). Tax is excluded (TAX_AND_STATUTORY category). Depreciation/amortisation not visible in transaction data."
+        },
+        "ebitda_margin": {
+            "formula": "ebitda / revenue",
+            "description": "EBITDA as a percentage of revenue, core operational profitability metric",
+            "unit": "percentage",
+            "interpretation": {
+                "healthy": "> 15% indicates strong operational efficiency",
+                "acceptable": "5-15% typical for established SMEs",
+                "warning": "0-5% suggests low profitability or growth investment phase",
+                "critical": "< 0% indicates operational losses"
+            }
+        },
+        "people_intensity": {
+            "formula": "SUM(PEOPLE_COSTS) / revenue",
+            "description": "Total people costs as a percentage of revenue, indicator of labour dependency and automation level",
+            "unit": "percentage",
+            "interpretation": {
+                "high_labour": "> 50% for service/consulting businesses",
+                "moderate": "20-50% typical for mixed businesses",
+                "low_labour": "< 20% for automated/capital intensive businesses"
+            }
+        },
+        "finance_cost_burden": {
+            "formula": "SUM(FINANCE_COSTS) / revenue",
+            "description": "Finance and banking costs as a percentage of revenue, includes payment processing and borrowing costs",
+            "unit": "percentage",
+            "interpretation": {
+                "healthy": "< 3% for most businesses",
+                "elevated": "3-5% may indicate high card volumes or expensive financing",
+                "warning": "> 5% suggests high debt servicing or inefficient payment infrastructure"
+            }
+        },
+        "operating_expense_ratio": {
+            "formula": "SUM(OPERATING_EXPENSES excluding PEOPLE_COSTS, FINANCE_COSTS, TRANSPORT_AND_LOGISTICS, INSURANCE) / revenue",
+            "description": "Core operating expenses as percentage of revenue, excludes people and finance costs for cleaner overhead analysis",
+            "unit": "percentage"
+        },
+        "fixed_cost_ratio": {
+            "formula": "SUM(rent_rates + salaries_wages + software_subscriptions + insurance) / total_operating_costs",
+            "description": "Proportion of operating costs that are fixed/committed, indicator of operational leverage and flexibility",
+            "unit": "percentage",
+            "interpretation": {
+                "high_fixed": "> 60% suggests lower flexibility but potential economies of scale",
+                "balanced": "40-60% typical for most SMEs",
+                "variable_heavy": "< 40% indicates flexible cost base, easier to scale down"
+            }
+        },
+        "debt_service_coverage": {
+            "formula": "ebitda / (SUM(loan_repayment + interest_and_finance_charges))",
+            "description": "Ability to service debt from operating cash flow. Critical lender metric.",
+            "unit": "ratio",
+            "interpretation": {
+                "strong": "> 2.0x indicates comfortable debt servicing capacity",
+                "acceptable": "1.25-2.0x meets typical lender requirements",
+                "warning": "1.0-1.25x tight coverage, vulnerable to revenue shocks",
+                "distressed": "< 1.0x unable to service debt from operations"
+            }
+        },
+        "working_capital_burn": {
+            "formula": "SUM(owner_withdrawal + loan_repayment + asset_purchase) - SUM(owner_investment + loan_drawdown)",
+            "description": "Net capital consumed or generated excluding operating activity, indicator of liquidity stress or growth investment",
+            "unit": "GBP",
+            "interpretation": {
+                "positive_burn": "Consuming capital faster than generating it, may indicate distress or growth phase",
+                "negative_burn": "Generating capital, indicates strong cash generation or deleveraging"
+            }
+        },
+        "revenue_concentration_risk": {
+            "formula": "Computed from frequency and clustering of revenue receipts",
+            "description": "Derived signal: high concentration in few large receipts vs distributed small receipts",
+            "unit": "qualitative",
+            "notes": "Requires transaction-level frequency analysis, not a simple sum"
+        },
+        "payment_stress_signals": {
+            "formula": "COUNT(failed_payments) + COUNT(overdraft_interest) + patterns in late supplier payments",
+            "description": "Composite signal of liquidity stress from failed transactions and timing patterns",
+            "unit": "count and pattern analysis",
+            "notes": "Behavioral metric derived from ADJUSTMENTS category and payment timing"
+        },
+        "supplier_dependency": {
+            "formula": "Largest single supplier spend / total_cogs",
+            "description": "Concentration risk in supply chain, requires counterparty analysis",
+            "unit": "percentage",
+            "notes": "Requires transaction-level counterparty clustering, not category-level"
+        }
+    },
+    "category_tree": {
+        "REVENUE": {
+            "category": "REVENUE",
+            "name": "Revenue",
+            "definition": "Trading income from core business activities. Funds received for goods or services sold.",
+            "transaction_direction": "CREDIT",
+            "subcategories": [
+                {
+                    "category": "card_payments",
+                    "name": "Card Payments",
+                    "definition": "Revenue received via card acquiring services including card scheme settlements, POS terminal receipts, and payment facilitator payouts. Typically batched and settled on a regular cadence.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK card payment settlements from acquirers. Use merchant names like: Worldpay, Barclaycard, Stripe, Square, SumUp, Zettle. Include patterns: 'WORLDPAY SETTLEMENT', 'STRIPE PAYOUT', 'BARCLAYCARD MERCHANT', 'SQUARE INC', 'SUMUP PAYMENTS'. Amounts: £500-£15,000 for retail, £50-£5,000 for small businesses. Frequency: daily or weekly batches. Description should include settlement date or batch reference."
+                },
+                {
+                    "category": "bank_transfers_in",
+                    "name": "Bank Transfers In",
+                    "definition": "Direct customer payments received via bank transfer for goods or services, including invoice settlements and ad-hoc customer payments.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK bank transfers from customers. Use payment types: 'FASTER PAYMENT', 'BACS', 'CHAPs'. Include patterns: 'FP FROM [CUSTOMER NAME]', 'BACS CREDIT', 'CUSTOMER PAYMENT', 'INVOICE 12345'. Customer names should be mix of: business names (ABC LTD, XYZ SERVICES), personal names (J SMITH, SARAH JONES). Amounts: £100-£25,000. Include invoice references occasionally: 'INV-2024-001', 'REF 45678'. Frequency: irregular, clustered around month-end."
+                },
+                {
+                    "category": "platform_payouts",
+                    "name": "Platform Payouts",
+                    "definition": "Revenue settlements from online marketplaces, platforms, or intermediaries that collect customer funds and remit proceeds to the business.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK marketplace and platform payouts. Platform names: Amazon, eBay, Etsy, Shopify, Deliveroo, Uber Eats, Just Eat. Patterns: 'AMAZON EU SARL', 'PAYPAL TRANSFER', 'EBAY PAYMENT', 'SHOPIFY PAYMENTS', 'DELIVEROO PAYMENTS', 'UBER EATS TRANSFER'. Amounts: £200-£8,000 for food delivery, £500-£20,000 for ecommerce. Frequency: weekly or bi-weekly settlements. Include settlement IDs occasionally."
+                },
+                {
+                    "category": "cash_deposits",
+                    "name": "Cash Deposits",
+                    "definition": "Cash deposited into the business account, typically representing daily takings or cash sales from physical retail or hospitality operations.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK cash deposits. Patterns: 'CASH DEPOSIT', 'BRANCH DEPOSIT', 'ATM DEPOSIT', 'COUNTER DEPOSIT [BRANCH NAME]'. Branch names: realistic UK locations like 'DEPOSIT BARCLAYS LEEDS', 'HSBC MANCHESTER BRANCH', 'LLOYDS BIRMINGHAM'. Amounts: £100-£2,500 for small retail, £500-£5,000 for hospitality. Frequency: daily for hospitality/retail, weekly for others. Include till references occasionally: 'TILL 1', 'DAILY TAKINGS'."
+                },
+                {
+                    "category": "other_revenue",
+                    "name": "Other Revenue",
+                    "definition": "Operating income related to trading but not direct sales receipts, such as commissions earned, service fees charged, or minor reimbursements related to trading activity.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate miscellaneous UK trading receipts. Patterns: 'COMMISSION RECEIVED', 'SERVICE FEE', 'REFERRAL FEE', 'AFFILIATE PAYMENT', 'CONSULTING FEE', 'LICENSE FEE'. Amounts: £50-£3,000. Frequency: irregular. Include reference codes occasionally. Should be clearly business-related but not direct product/service sales."
+                }
+            ]
+        },
+        "NON_REVENUE_INFLOWS": {
+            "category": "NON_REVENUE_INFLOWS",
+            "name": "Non-Revenue Inflows",
+            "definition": "Inflows that are not trading revenue and must be excluded from turnover calculations. Includes grants, subsidies, insurance claims, refunds received, and asset sale proceeds.",
+            "transaction_direction": "CREDIT",
+            "subcategories": [
+                {
+                    "category": "grants_subsidies",
+                    "name": "Grants and Subsidies",
+                    "definition": "Government grants, subsidies, and support payments received by the business including COVID support schemes, R&D grants, local authority grants.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK government grant receipts. Patterns: 'HMRC GRANT', 'INNOVATE UK', 'LOCAL AUTHORITY GRANT', 'BOUNCE BACK LOAN SCHEME', 'SMALL BUSINESS GRANT', 'R&D TAX CREDIT', 'SCOTTISH ENTERPRISE', 'WELSH GOVERNMENT'. Amounts: £1,000-£50,000. Frequency: one-off or quarterly. Include scheme names and reference numbers."
+                },
+                {
+                    "category": "insurance_claims",
+                    "name": "Insurance Claims Received",
+                    "definition": "Insurance claim payments received from insurers for business losses, damage, or covered events. Typically irregular and non-trading.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK insurance claim receipts. Insurer names: Aviva, AXA, Zurich, Allianz, Hiscox, NFU Mutual. Patterns: 'AVIVA CLAIM PAYMENT', 'AXA INSURANCE CLAIM', 'HISCOX SETTLEMENT', 'CLAIM REF 123456'. Amounts: £500-£15,000. Frequency: irregular, one-off. Include claim reference numbers."
+                },
+                {
+                    "category": "refunds_received",
+                    "name": "Refunds Received",
+                    "definition": "Refunds or credits received from suppliers or service providers, representing reversal of prior expense payments.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK refund receipts. Patterns: 'REFUND FROM [SUPPLIER]', 'CREDIT NOTE', 'SUPPLIER REFUND', 'OVERPAYMENT RETURN', 'REFUND - [DESCRIPTION]'. Supplier names: mix of utilities (British Gas, EDF), telecoms (BT, Vodafone), retail (Amazon, Screwfix). Amounts: £20-£800. Frequency: irregular. Should reference original purchase occasionally."
+                },
+                {
+                    "category": "asset_sale_proceeds",
+                    "name": "Asset Sale Proceeds",
+                    "definition": "Proceeds from selling business equipment, vehicles, or other assets. Treated as non-trading capital inflow.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK asset sale receipts. Patterns: 'VEHICLE SALE', 'EQUIPMENT SALE', 'ASSET DISPOSAL', 'SALE OF [ASSET TYPE]'. Asset types: van, car, machinery, equipment, furniture. Buyers: mix of business names and 'WEBUYANYCAR', 'AUTOTRADER', private buyers. Amounts: £1,000-£15,000. Frequency: very irregular, one-off."
+                }
+            ]
+        },
+        "COST_OF_SALES": {
+            "category": "COST_OF_SALES",
+            "name": "Cost of Sales",
+            "definition": "Direct costs required to produce, purchase, or deliver the goods or services sold. Used to calculate gross margin and assess production efficiency.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "inventory_wholesale",
+                    "name": "Inventory and Wholesale",
+                    "definition": "Purchases of stock, inventory, or wholesale goods intended for resale. Includes trade suppliers and wholesalers.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK wholesale and inventory purchases. Supplier names: Booker, Costco, Makro, Brakes, Bidfood, trade suppliers, manufacturers. Patterns: 'BOOKER LTD', 'COSTCO WHOLESALE', 'PAYMENT TO [SUPPLIER]', 'TRADE ACCOUNT'. Amounts: £200-£8,000 per transaction. Frequency: weekly or bi-weekly. Include account references occasionally: 'ACC 12345'."
+                },
+                {
+                    "category": "raw_materials",
+                    "name": "Raw Materials and Inputs",
+                    "definition": "Inputs consumed to produce goods or deliver services including ingredients, consumables, and production materials.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK raw material purchases. Supplier types: ingredient suppliers, packaging suppliers, manufacturing inputs. Patterns: 'SUPPLIER INVOICE', 'MATERIALS PURCHASE', payments to trade suppliers. Supplier names: industry-specific (e.g., 'PACKAGING SUPPLIES LTD', 'INGREDIENT CO', 'MATERIALS DIRECT'). Amounts: £100-£5,000. Frequency: weekly to monthly."
+                },
+                {
+                    "category": "subcontractors",
+                    "name": "Subcontractors",
+                    "definition": "Payments to subcontractors, freelancers, or third parties for outsourced work that directly supports revenue generation. Includes direct labour and subcontracted fulfilment.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK subcontractor payments. Patterns: 'SUBCONTRACTOR PAYMENT', 'FREELANCER', payment to individual names or trade businesses, 'CONTRACT WORK'. Payee names: mix of personal names (J SMITH PLUMBING, SARAH JONES DESIGN) and trade businesses (ABC BUILDERS, XYZ ELECTRICAL). Amounts: £200-£5,000. Frequency: weekly to monthly. Include 'CIS' occasionally for construction."
+                },
+                {
+                    "category": "shipping_fulfilment",
+                    "name": "Shipping and Fulfilment",
+                    "definition": "Direct delivery and fulfilment costs tightly linked to sales volume, excluding general logistics overhead.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK shipping and fulfilment costs. Carriers: Royal Mail, DPD, Hermes/Evri, Yodel, Amazon Logistics, DHL, Parcelforce. Patterns: 'ROYAL MAIL', 'DPD UK', 'EVRI DELIVERY', 'AMAZON LOGISTICS', 'SHIPPING CHARGE'. Amounts: £5-£500 per transaction, can be daily for high-volume ecommerce. Frequency: daily to weekly. Include tracking references occasionally."
+                },
+                {
+                    "category": "platform_fees",
+                    "name": "Platform and Marketplace Fees",
+                    "definition": "Marketplace or platform commissions and fees that act like cost of sales, distinct from payment processing fees.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK marketplace commission charges. Platforms: Amazon, eBay, Etsy, Deliveroo, Uber Eats, Just Eat. Patterns: 'AMAZON SELLER FEES', 'EBAY FINAL VALUE FEE', 'ETSY TRANSACTION FEE', 'DELIVEROO COMMISSION', 'JUST EAT SERVICE CHARGE'. Amounts: £10-£2,000 depending on sales volume. Frequency: monthly or per transaction batch."
+                }
+            ]
+        },
+        "OPERATING_EXPENSES": {
+            "category": "OPERATING_EXPENSES",
+            "name": "Operating Expenses",
+            "definition": "Day-to-day costs required to operate the business excluding direct production costs, people costs, finance costs, transport, and insurance. Supports operating leverage analysis.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "rent_rates",
+                    "name": "Rent and Rates",
+                    "definition": "Commercial rent, business rates, and property-related occupancy costs for business premises.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK rent and rates payments. Patterns: 'RENT PAYMENT', 'COMMERCIAL RENT', 'BUSINESS RATES', payment to landlords or councils. Payee names: '[LANDLORD NAME]', '[COUNCIL NAME] BUSINESS RATES', 'PROPERTY MANAGEMENT LTD'. Council names: realistic UK councils (Westminster, Birmingham, Manchester, Leeds Council). Amounts: £800-£5,000 for rent, £200-£2,000 for rates. Frequency: monthly standing orders or quarterly for rates."
+                },
+                {
+                    "category": "utilities",
+                    "name": "Utilities",
+                    "definition": "Electricity, gas, water, and other essential utility charges for business premises.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK utility payments. Providers: British Gas, EDF Energy, E.ON, Scottish Power, Octopus Energy, Thames Water, Severn Trent, United Utilities. Patterns: 'BRITISH GAS', 'EDF ENERGY', 'WATER BILL', 'GAS DIRECT DEBIT', 'ELECTRICITY PAYMENT'. Amounts: £50-£800 per month. Frequency: monthly direct debits. Include account references occasionally."
+                },
+                {
+                    "category": "software_subscriptions",
+                    "name": "Software and Subscriptions",
+                    "definition": "Software, digital tools, SaaS products, licences, and recurring subscriptions supporting business operations.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK SaaS and software subscriptions. Providers: Microsoft, Adobe, Salesforce, Xero, QuickBooks, Sage, Google Workspace, Zoom, Slack, Dropbox, Shopify, Mailchimp. Patterns: 'MICROSOFT 365', 'ADOBE CREATIVE CLOUD', 'XERO SUBSCRIPTION', 'SAGE ACCOUNTING', 'GOOGLE WORKSPACE', 'ZOOM.US'. Amounts: £10-£500 per month. Frequency: monthly recurring payments. Include subscription tiers occasionally."
+                },
+                {
+                    "category": "telecoms",
+                    "name": "Telecoms and Connectivity",
+                    "definition": "Internet, phone, mobile contracts, connectivity services, and related communications expenses.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK telecoms payments. Providers: BT, Vodafone, EE, Three, O2, Sky Business, TalkTalk, Virgin Media. Patterns: 'BT BUSINESS', 'VODAFONE', 'EE MOBILE', 'O2 UK', 'SKY BUSINESS BROADBAND', 'VIRGIN MEDIA BUSINESS'. Amounts: £30-£300 per month. Frequency: monthly direct debits. Include account or phone numbers occasionally."
+                },
+                {
+                    "category": "accounting_legal",
+                    "name": "Accounting and Legal",
+                    "definition": "Fees for accounting, bookkeeping, audit, legal services, and tax advisory.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK accounting and legal fees. Service providers: accountant names (SMITH & CO ACCOUNTANTS, ABC ACCOUNTING), law firms (XYZ SOLICITORS, LEGAL SERVICES LTD), 'BOOKKEEPING SERVICES'. Patterns: 'ACCOUNTANT FEE', 'LEGAL FEES', 'AUDIT SERVICES', 'TAX ADVICE', 'BOOKKEEPING'. Amounts: £100-£2,000 for accounting, £200-£5,000 for legal. Frequency: monthly for bookkeeping, quarterly for accounting, ad-hoc for legal."
+                },
+                {
+                    "category": "consulting_advisory",
+                    "name": "Consulting and Advisory",
+                    "definition": "Specialist consulting, business advisory, recruitment, and outsourced operational support services.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK consulting and advisory fees. Patterns: 'CONSULTANT FEE', 'BUSINESS ADVISOR', 'MANAGEMENT CONSULTANT', 'RECRUITMENT FEE', 'HR SERVICES'. Provider names: consultancy firms, individual consultants. Amounts: £500-£5,000. Frequency: irregular, project-based. Include project references occasionally."
+                },
+                {
+                    "category": "marketing_advertising",
+                    "name": "Marketing and Advertising",
+                    "definition": "Advertising, marketing platforms, agencies, promotions, and sales-related services excluding marketplace commissions.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK marketing spend. Platforms: Google Ads, Facebook/Meta, LinkedIn, TikTok, Twitter/X. Agencies: MARKETING AGENCY LTD, DIGITAL SERVICES. Patterns: 'GOOGLE ADS', 'FACEBOOK ADS', 'META PLATFORMS', 'LINKEDIN ADVERTISING', 'MARKETING SERVICES', 'PROMOTIONAL MATERIALS'. Amounts: £50-£3,000 per month. Frequency: monthly for platforms, ad-hoc for agencies."
+                },
+                {
+                    "category": "office_admin",
+                    "name": "Office and Administration",
+                    "definition": "General administrative expenses including office supplies, stationery, postage, printing, and routine admin services.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK office and admin expenses. Suppliers: Amazon Business, Viking Direct, Staples, Office Outlet, Royal Mail, local printers. Patterns: 'AMAZON BUSINESS', 'OFFICE SUPPLIES', 'STATIONERY', 'PRINTING', 'POSTAGE', 'VIKING DIRECT'. Amounts: £20-£400. Frequency: monthly to irregular. Include item descriptions occasionally."
+                },
+                {
+                    "category": "repairs_maintenance",
+                    "name": "Repairs and Maintenance",
+                    "definition": "Maintenance and repair of premises, equipment, and operational assets excluding vehicle-specific running costs.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK repairs and maintenance. Service providers: MAINTENANCE SERVICES LTD, REPAIR CO, ABC PLUMBING, XYZ ELECTRICAL, PROPERTY MAINTENANCE. Patterns: 'REPAIRS', 'MAINTENANCE', 'PLUMBING', 'ELECTRICAL WORK', 'BUILDING REPAIR'. Amounts: £100-£2,000. Frequency: irregular, ad-hoc. Include job references occasionally."
+                },
+                {
+                    "category": "equipment_tools",
+                    "name": "Equipment and Tools",
+                    "definition": "Small equipment purchases, tools, consumables, and operational assets excluding major capital expenditure.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK equipment and tools purchases. Suppliers: Screwfix, Toolstation, Machine Mart, RS Components, Amazon, trade suppliers. Patterns: 'SCREWFIX', 'TOOLSTATION', 'EQUIPMENT PURCHASE', 'TOOLS', 'MACHINE MART'. Amounts: £30-£1,500 per transaction. Frequency: irregular. Should be small operational purchases, not vehicles or major machinery."
+                },
+                {
+                    "category": "training_memberships",
+                    "name": "Training and Memberships",
+                    "definition": "Staff training courses, professional memberships, certifications, and industry association fees.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK training and membership fees. Organisations: professional bodies (ACCA, CIMA, ICE, RICS, BCS), training providers, industry associations. Patterns: 'TRAINING COURSE', 'PROFESSIONAL MEMBERSHIP', 'CERTIFICATION FEE', 'INDUSTRY ASSOCIATION', 'CPD TRAINING'. Amounts: £50-£1,500. Frequency: annual for memberships, irregular for training."
+                },
+                {
+                    "category": "travel_accommodation",
+                    "name": "Business Travel and Accommodation",
+                    "definition": "Business travel costs including rail, taxis, flights, hotels, and subsistence excluding delivery logistics.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK business travel expenses. Providers: Trainline, LNER, GWR, Virgin Trains, Uber, Bolt, Premier Inn, Travelodge, British Airways, easyJet. Patterns: 'TRAINLINE', 'LNER TICKET', 'UBER TRIP', 'PREMIER INN', 'FLIGHT BOOKING', 'HOTEL'. Amounts: £10-£500 per trip. Frequency: irregular. Include journey details occasionally: 'LONDON TO MANCHESTER'."
+                }
+            ]
+        },
+        "PEOPLE_COSTS": {
+            "category": "PEOPLE_COSTS",
+            "name": "People Costs",
+            "definition": "Costs associated with employing and supporting staff including salaries, wages, statutory contributions, contractors, and benefits. Critical for people intensity metrics.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "salaries_wages",
+                    "name": "Salaries and Wages",
+                    "definition": "Regular wage and salary payments to employees including monthly salaries and weekly wages.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK payroll payments. Patterns: 'SALARY', 'WAGES', 'PAYROLL', payment to employee names, 'BACS SALARY PAYMENT', 'NET PAY'. Payee names: realistic employee names (J SMITH, SARAH JONES, M PATEL). Amounts: £1,200-£4,500 per employee per month for salaries, £300-£800 per week for wages. Frequency: monthly for salaries, weekly/fortnightly for wages. Include payroll references occasionally."
+                },
+                {
+                    "category": "employer_taxes",
+                    "name": "Employer Taxes and Contributions",
+                    "definition": "Employer National Insurance contributions and pension contributions.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK employer NI and pension payments. Patterns: 'EMPLOYER NI', 'NATIONAL INSURANCE', 'PENSION CONTRIBUTION', 'NEST PENSION', 'EMPLOYER PENSION', payments to pension providers (NEST, NOW Pensions, Scottish Widows, Aviva). Amounts: £200-£1,500 per month depending on payroll size. Frequency: monthly. Include pension scheme references."
+                },
+                {
+                    "category": "contractors_freelancers",
+                    "name": "Contractors and Freelancers",
+                    "definition": "Payments to contractors, freelancers, consultants, and agency labour used as workforce capacity, excluding subcontractors directly tied to COGS.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK contractor payments. Patterns: 'CONTRACTOR', 'FREELANCER', payment to individual names or limited companies, 'CONSULTANCY FEE', 'AGENCY WORKER'. Payee names: individual names with Ltd suffix (J SMITH LTD, SARAH JONES CONSULTING LTD), recruitment agencies (REED, HAYS, MANPOWER). Amounts: £500-£4,000. Frequency: monthly or project-based. Include 'IR35' context occasionally."
+                },
+                {
+                    "category": "staff_expenses",
+                    "name": "Staff Expenses and Reimbursements",
+                    "definition": "Expense reimbursements to employees including travel claims, subsistence, and allowable business expenses repaid to staff.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK staff expense reimbursements. Patterns: 'EXPENSE CLAIM', 'STAFF REIMBURSEMENT', payment to employee names with 'EXPENSES' suffix, 'TRAVEL CLAIM', 'MILEAGE CLAIM'. Amounts: £30-£400 per claim. Frequency: monthly or ad-hoc. Include expense reference codes occasionally: 'EXP-2024-001'."
+                },
+                {
+                    "category": "benefits_wellbeing",
+                    "name": "Benefits and Wellbeing",
+                    "definition": "Employee benefits, healthcare contributions, wellness programs, and staff-related spend funded by the business.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK employee benefits. Providers: Bupa, AXA Health, Vitality, Cycle to Work schemes. Patterns: 'BUPA HEALTHCARE', 'AXA HEALTH INSURANCE', 'EMPLOYEE BENEFITS', 'WELLNESS SCHEME', 'CYCLE SCHEME'. Amounts: £50-£500 per month. Frequency: monthly. Include employee counts occasionally."
+                }
+            ]
+        },
+        "FINANCE_COSTS": {
+            "category": "FINANCE_COSTS",
+            "name": "Finance and Banking Costs",
+            "definition": "Costs associated with accepting payments, banking services, and borrowing. Used to calculate finance cost burden ratio.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "card_processing_fees",
+                    "name": "Card Processing Fees",
+                    "definition": "Fees charged by payment processors and acquirers for card acceptance and settlement services.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK card processing fees. Processors: Worldpay, Stripe, Square, SumUp, PayPal, Barclaycard. Patterns: 'WORLDPAY FEES', 'STRIPE FEES', 'CARD PROCESSING CHARGE', 'MERCHANT SERVICE CHARGE', 'TRANSACTION FEE', 'SQUARE FEES'. Amounts: £20-£800 per month depending on card volume. Frequency: monthly or per batch. Include percentage rates occasionally: '1.75% + 20p'."
+                },
+                {
+                    "category": "bank_charges",
+                    "name": "Bank Charges and Fees",
+                    "definition": "Account servicing charges, transaction fees, overdraft fees, and bank penalty charges.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK bank fees. Banks: Barclays, HSBC, Lloyds, NatWest, Santander, Metro Bank, Starling, Tide. Patterns: 'BANK CHARGES', 'ACCOUNT FEE', 'OVERDRAFT FEE', 'TRANSACTION CHARGE', 'UNPAID ITEM FEE', 'MONTHLY SERVICE FEE'. Amounts: £5-£150 per month, £20-£50 for overdraft fees. Frequency: monthly for service fees, ad-hoc for penalties."
+                },
+                {
+                    "category": "loan_interest",
+                    "name": "Loan Interest and Finance Charges",
+                    "definition": "Interest payments and finance charges on loans, overdrafts, credit facilities, and asset finance.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK interest charges. Patterns: 'LOAN INTEREST', 'OVERDRAFT INTEREST', 'FINANCE CHARGE', 'INTEREST ON LOAN', '[LENDER] INTEREST'. Lenders: high street banks, alternative lenders (Funding Circle, iwoca, Bibby Financial). Amounts: £50-£2,000 per month. Frequency: monthly. Include loan reference numbers occasionally."
+                },
+                {
+                    "category": "fx_fees",
+                    "name": "FX and Cross-Border Fees",
+                    "definition": "Foreign exchange charges and cross-border transaction fees charged by banks or payment providers.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK FX and cross-border fees. Patterns: 'FX FEE', 'FOREIGN EXCHANGE CHARGE', 'INTERNATIONAL PAYMENT FEE', 'CURRENCY CONVERSION', 'CROSS BORDER CHARGE'. Amounts: £5-£100 per transaction. Frequency: irregular, linked to international transactions. Include currency codes occasionally: 'EUR', 'USD'."
+                }
+            ]
+        },
+        "ASSETS_AND_CAPITAL": {
+            "category": "ASSETS_AND_CAPITAL",
+            "name": "Assets and Capital",
+            "definition": "Balance sheet movements including financing structure, liquidity management, asset purchases, and owner equity activity. Excluded from operating margin calculations.",
+            "transaction_direction": "BOTH",
+            "subcategories": [
+                {
+                    "category": "internal_transfers",
+                    "name": "Internal Transfers",
+                    "definition": "Transfers between accounts owned by the same business including treasury sweeps and internal reallocations.",
+                    "transaction_direction": "BOTH",
+                    "synthetic_prompt": "Generate UK inter-account transfers. Patterns: 'TRANSFER TO [ACCOUNT NAME]', 'TRANSFER FROM [ACCOUNT NAME]', 'INTERNAL TRANSFER', 'SWEEP TO SAVINGS', 'FUNDS TRANSFER'. Account names: 'BUSINESS CURRENT ACCOUNT', 'RESERVE ACCOUNT', 'SAVINGS ACCOUNT'. Amounts: £500-£50,000. Frequency: irregular. Both DEBIT (transfer out) and CREDIT (transfer in) transactions."
+                },
+                {
+                    "category": "savings_deposits",
+                    "name": "Savings and Deposits",
+                    "definition": "Transfers into or out of deposit, notice, or savings products indicating liquidity buffering behaviour.",
+                    "transaction_direction": "BOTH",
+                    "synthetic_prompt": "Generate UK savings movements. Banks: same as current account providers. Patterns: 'TRANSFER TO SAVINGS', 'DEPOSIT ACCOUNT TRANSFER', 'NOTICE ACCOUNT', 'WITHDRAWAL FROM SAVINGS'. Amounts: £1,000-£30,000. Frequency: irregular, strategic. Both DEBIT (deposit into savings) and CREDIT (withdrawal from savings)."
+                },
+                {
+                    "category": "loan_drawdown",
+                    "name": "Loan and Credit Drawdowns",
+                    "definition": "Inflows from loans, revolving credit, merchant cash advance, invoice finance, or other borrowing.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK loan drawdowns. Lenders: high street banks (Barclays, HSBC, Lloyds), alternative lenders (Funding Circle, iwoca, Tide, Capify, MarketFinance). Patterns: 'LOAN ADVANCE', 'CREDIT FACILITY DRAWDOWN', 'MERCHANT CASH ADVANCE', 'INVOICE FINANCE', 'REVOLVING CREDIT'. Amounts: £5,000-£100,000. Frequency: one-off or quarterly. Include facility references."
+                },
+                {
+                    "category": "loan_repayment",
+                    "name": "Loan Repayments",
+                    "definition": "Principal repayments for loans and credit facilities, excluding interest where separately identifiable.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK loan repayments. Patterns: 'LOAN REPAYMENT', 'CREDIT REPAYMENT', 'PRINCIPAL PAYMENT', '[LENDER] LOAN', 'DD LOAN REPAYMENT'. Lenders: same as drawdown. Amounts: £200-£5,000 per month. Frequency: monthly direct debits. Include loan account references."
+                },
+                {
+                    "category": "lease_payments",
+                    "name": "Lease Payments",
+                    "definition": "Asset finance lease payments and hire purchase instalments for vehicles, equipment, and machinery.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK lease payments. Providers: Close Brothers, Lombard, Hitachi Capital, Black Horse, Lex Autolease. Patterns: 'LEASE PAYMENT', 'HP PAYMENT', 'VEHICLE FINANCE', 'EQUIPMENT LEASE', '[PROVIDER] FINANCE'. Amounts: £150-£1,500 per month. Frequency: monthly direct debits. Include asset type occasionally: 'VAN LEASE', 'EQUIPMENT HP'."
+                },
+                {
+                    "category": "asset_purchase",
+                    "name": "Asset Purchases",
+                    "definition": "One-off or infrequent purchases of long-lived assets such as machinery, vehicles, fit-outs, or major equipment representing capital expenditure.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK capital expenditure. Patterns: 'VEHICLE PURCHASE', 'EQUIPMENT PURCHASE', 'MACHINERY', payments to dealers or suppliers, 'CAPITAL INVESTMENT'. Sellers: vehicle dealers, equipment suppliers, commercial vehicle sellers. Amounts: £3,000-£40,000. Frequency: very irregular, one-off. Include asset description."
+                },
+                {
+                    "category": "owner_investment",
+                    "name": "Owner Investment and Capital Injections",
+                    "definition": "Capital introduced by owners or directors into the business, including shareholder funding and director loans in.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK owner capital injections. Patterns: 'DIRECTOR LOAN', 'CAPITAL INJECTION', 'OWNER INVESTMENT', 'SHAREHOLDER FUNDING', payment from director names. Director names: realistic personal names. Amounts: £1,000-£50,000. Frequency: irregular, strategic. Include 'DIRECTOR' in description."
+                },
+                {
+                    "category": "owner_withdrawal",
+                    "name": "Owner Drawings and Dividends",
+                    "definition": "Funds extracted by owners including personal transfers out, drawings, dividend distributions, and director loan repayments.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK owner withdrawals. Patterns: 'DRAWINGS', 'DIVIDEND PAYMENT', 'TRANSFER TO [DIRECTOR NAME]', 'DIRECTOR LOAN REPAYMENT', 'OWNER WITHDRAWAL'. Payee names: personal names or 'PERSONAL ACCOUNT'. Amounts: £500-£10,000. Frequency: monthly or irregular. Label clearly as personal/director transactions."
+                }
+            ]
+        },
+        "TAX_AND_STATUTORY": {
+            "category": "TAX_AND_STATUTORY",
+            "name": "Tax and Statutory Payments",
+            "definition": "Statutory payments and fees required by government bodies including taxes, duties, licensing fees, and penalties.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "vat_payment",
+                    "name": "VAT Payments",
+                    "definition": "VAT or sales tax payments to HMRC.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK VAT payments to HMRC. Patterns: 'VAT PAYMENT', 'HMRC VAT', 'VAT RETURN PAYMENT', 'VALUE ADDED TAX'. Amounts: £500-£15,000 quarterly. Frequency: quarterly. Include VAT period references: 'VAT Q1 2024', 'PERIOD 03/24'."
+                },
+                {
+                    "category": "corporation_tax",
+                    "name": "Corporation Tax",
+                    "definition": "Corporation tax and business tax payments to HMRC.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK corporation tax payments. Patterns: 'CORPORATION TAX', 'HMRC CT PAYMENT', 'COMPANY TAX', 'CT600 PAYMENT'. Amounts: £1,000-£25,000 annually. Frequency: typically annual or semi-annual. Include accounting period references."
+                },
+                {
+                    "category": "paye_hmrc",
+                    "name": "PAYE and Payroll Taxes",
+                    "definition": "PAYE income tax and employee National Insurance payments to HMRC.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK PAYE payments. Patterns: 'PAYE PAYMENT', 'HMRC PAYE', 'PAYROLL TAX', 'EMPLOYEE TAX & NI', 'RTI PAYMENT'. Amounts: £500-£8,000 per month depending on payroll size. Frequency: monthly. Include tax month references: 'MONTH 12', 'TAX MONTH 03'."
+                },
+                {
+                    "category": "licences_permits",
+                    "name": "Licences and Permits",
+                    "definition": "Government registrations, business licences, permits, and statutory fees.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK licensing fees. Patterns: 'LICENCE FEE', 'TRADE LICENCE', 'ALCOHOL LICENCE', 'PREMISES LICENCE', payments to local councils, 'REGISTRATION FEE', 'PERMIT'. Amounts: £100-£2,000. Frequency: annual or one-off. Include licence types: 'FOOD HYGIENE', 'ALCOHOL', 'TAXI LICENCE'."
+                },
+                {
+                    "category": "fines_penalties",
+                    "name": "Fines and Penalties",
+                    "definition": "Government or regulatory fines and penalties including HMRC penalties, parking fines, and compliance penalties.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK fines and penalties. Patterns: 'PENALTY CHARGE', 'HMRC PENALTY', 'LATE FILING PENALTY', 'PARKING FINE', council penalty notices. Amounts: £50-£1,000. Frequency: irregular, should be rare. Include penalty reasons occasionally: 'LATE VAT RETURN', 'PARKING PCN'."
+                }
+            ]
+        },
+        "INSURANCE": {
+            "category": "INSURANCE",
+            "name": "Insurance",
+            "definition": "Payments to insurers to transfer operational and business risks. Supports resilience and risk maturity assessment.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "business_insurance",
+                    "name": "Business Insurance",
+                    "definition": "General business insurance, commercial packages, public liability, employers liability, and property insurance.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK business insurance premiums. Insurers: Aviva, AXA, Zurich, Allianz, Hiscox, NFU Mutual, Simply Business. Patterns: 'BUSINESS INSURANCE', 'COMMERCIAL INSURANCE', 'PUBLIC LIABILITY', 'EMPLOYERS LIABILITY', '[INSURER] PREMIUM'. Amounts: £50-£500 per month or £500-£3,000 annually. Frequency: monthly or annual. Include policy types."
+                },
+                {
+                    "category": "vehicle_insurance",
+                    "name": "Vehicle Insurance",
+                    "definition": "Commercial vehicle insurance for business vehicles, vans, and fleet cover.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK vehicle insurance. Insurers: Admiral, Direct Line, AXA, Aviva, NFU. Patterns: 'VEHICLE INSURANCE', 'VAN INSURANCE', 'FLEET INSURANCE', 'COMMERCIAL VEHICLE', '[INSURER] MOTOR'. Amounts: £80-£400 per month. Frequency: monthly or annual. Include vehicle registration occasionally."
+                },
+                {
+                    "category": "professional_indemnity",
+                    "name": "Professional Indemnity",
+                    "definition": "Professional indemnity or equivalent cover for advice, professional services, and errors & omissions.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK professional indemnity insurance. Insurers: Hiscox, AXA, QBE, Markel. Patterns: 'PROFESSIONAL INDEMNITY', 'PI INSURANCE', 'ERRORS & OMISSIONS', '[INSURER] PI COVER'. Amounts: £100-£800 per year. Frequency: annual. Include profession occasionally: 'CONSULTANT PI', 'ACCOUNTANT PI'."
+                }
+            ]
+        },
+        "TRANSPORT_AND_LOGISTICS": {
+            "category": "TRANSPORT_AND_LOGISTICS",
+            "name": "Transport and Logistics",
+            "definition": "Operational transport and logistics costs for business operations, distinct from direct shipping costs in COGS and business travel in operating expenses.",
+            "transaction_direction": "DEBIT",
+            "subcategories": [
+                {
+                    "category": "fuel",
+                    "name": "Fuel",
+                    "definition": "Fuel purchases for business vehicles including petrol, diesel, and commercial fuel cards.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK fuel purchases. Suppliers: Shell, BP, Esso, Texaco, Tesco, Sainsbury's, Morrisons fuel. Fuel cards: Allstar, UK Fuels, Keyfuels, Shell Card. Patterns: 'SHELL [LOCATION]', 'BP PETROL', 'ALLSTAR FUEL CARD', 'KEYFUELS', 'FUEL PURCHASE'. Amounts: £30-£200 per fill, £200-£1,500 per month for fleet. Frequency: weekly to daily. Include location occasionally."
+                },
+                {
+                    "category": "vehicle_running_costs",
+                    "name": "Vehicle Running Costs",
+                    "definition": "Vehicle servicing, repairs, MOT, road tax, tolls, parking, and routine running costs for business vehicles.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK vehicle costs. Patterns: 'MOT TEST', 'VEHICLE SERVICE', 'CAR REPAIR', 'DVLA ROAD TAX', 'PARKING CHARGE', 'CONGESTION CHARGE', 'TOLL PAYMENT', 'DARTFORD CROSSING'. Service providers: Halfords, Kwik Fit, local garages, councils for parking. Amounts: £50-£500. Frequency: irregular. Include vehicle registration occasionally."
+                },
+                {
+                    "category": "courier_delivery",
+                    "name": "Courier and Delivery Services",
+                    "definition": "Courier services and delivery partner fees for business operations, distinct from direct fulfilment costs in COGS.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK courier costs for general business use (not direct fulfilment). Carriers: DHL, UPS, FedEx, local couriers, CitySprint. Patterns: 'DHL EXPRESS', 'UPS COURIER', 'COURIER SERVICE', 'SAME DAY DELIVERY'. Amounts: £10-£150. Frequency: irregular. Should be general business courier use, not customer fulfilment."
+                },
+                {
+                    "category": "vehicle_rental",
+                    "name": "Vehicle Rental and Hire",
+                    "definition": "Short-term vehicle rental and hire for business operations.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK vehicle rental. Providers: Enterprise, Hertz, Europcar, Sixt, Avis. Patterns: 'ENTERPRISE RENT', 'HERTZ RENTAL', 'VAN HIRE', 'VEHICLE RENTAL'. Amounts: £50-£400 per hire. Frequency: irregular, weekly/monthly rentals. Include hire period occasionally: 'WEEKLY HIRE', '3 DAY RENTAL'."
+                }
+            ]
+        },
+        "ADJUSTMENTS": {
+            "category": "ADJUSTMENTS",
+            "name": "Adjustments and Exceptions",
+            "definition": "Corrective, disputed, or non-recurring entries that should not distort core metrics including refunds, reversals, chargebacks, and failed payments.",
+            "transaction_direction": "BOTH",
+            "subcategories": [
+                {
+                    "category": "refunds_issued",
+                    "name": "Refunds Issued",
+                    "definition": "Refund payments made by the business back to customers, should be netted against revenue.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK customer refunds. Patterns: 'REFUND TO CUSTOMER', 'CUSTOMER REFUND', 'REFUND PAYMENT', 'RETURN REFUND', payment to customer names or 'REFUND'. Amounts: £10-£500. Frequency: irregular. Include order references occasionally: 'ORDER 12345 REFUND'."
+                },
+                {
+                    "category": "chargebacks",
+                    "name": "Chargebacks and Disputes",
+                    "definition": "Chargebacks, payment disputes, and related reversals where identifiable.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate UK chargebacks. Patterns: 'CHARGEBACK', 'PAYMENT DISPUTE', 'DISPUTED TRANSACTION', 'REVERSAL - CHARGEBACK', '[ACQUIRER] CHARGEBACK'. Acquirers: Worldpay, Stripe, Barclaycard. Amounts: £20-£1,000. Frequency: irregular, should be rare. Include dispute reference codes."
+                },
+                {
+                    "category": "reversals",
+                    "name": "Reversals and Corrections",
+                    "definition": "Bank reversals, corrections, and accounting adjustments that are not chargebacks.",
+                    "transaction_direction": "BOTH",
+                    "synthetic_prompt": "Generate UK reversals and corrections. Patterns: 'REVERSAL', 'CORRECTION', 'BANK ERROR CORRECTION', 'ADJUSTMENT', 'CANCELLED TRANSACTION'. Can be DEBIT or CREDIT depending on original error. Amounts: £10-£2,000. Frequency: very rare. Include reference to original transaction occasionally."
+                },
+                {
+                    "category": "failed_payments",
+                    "name": "Failed and Returned Payments",
+                    "definition": "Returned direct debits, failed payments, and returned transfers indicating operational friction or liquidity stress.",
+                    "transaction_direction": "CREDIT",
+                    "synthetic_prompt": "Generate UK failed payment returns. Patterns: 'DD RETURNED', 'UNPAID DIRECT DEBIT', 'FAILED PAYMENT RETURNED', 'REFER TO DRAWER', 'INSUFFICIENT FUNDS'. Amounts: match original payment being returned. Frequency: should be rare, indicates stress. Include reason codes: 'INDEMNITY CLAIM', 'NO FUNDS'."
+                }
+            ]
+        },
+        "UNCATEGORISED": {
+            "category": "UNCATEGORISED",
+            "name": "Uncategorised",
+            "definition": "Transactions with insufficient confidence to assign to a specific category. Flagged for manual review and excluded from automated credit metrics.",
+            "transaction_direction": "BOTH",
+            "subcategories": [
+                {
+                    "category": "low_confidence",
+                    "name": "Low Confidence Classification",
+                    "definition": "Transaction descriptions that are too ambiguous or generic to classify with acceptable confidence. Requires human review.",
+                    "transaction_direction": "BOTH",
+                    "synthetic_prompt": "Generate ambiguous UK transactions. Patterns: 'PAYMENT', 'TRANSFER', 'TRANSACTION', generic references with numbers only, unclear counterparties, 'DD PAYMENT 12345', 'FP RECEIVED', 'STANDING ORDER'. Amounts: variable. These should be genuinely unclear - missing merchant names, no context, just reference numbers."
+                },
+                {
+                    "category": "personal_spend",
+                    "name": "Apparent Personal Spend",
+                    "definition": "Transactions that appear to be personal rather than business expenditure on a business account. Behavioural risk signal, excluded from operating costs.",
+                    "transaction_direction": "DEBIT",
+                    "synthetic_prompt": "Generate apparent personal spend on business accounts. Patterns: personal retail (Amazon personal items, supermarket grocery shops for home), entertainment (Netflix, Spotify, cinema, restaurants that seem personal), gambling (Betfair, Ladbrokes, online gaming), cash withdrawals. Suppliers: Netflix, Spotify, Amazon, supermarkets for non-business items. Amounts: £5-£200. Frequency: irregular. Should be clearly non-business in nature. Use sparingly and only for high-confidence personal spend."
+                }
+            ]
+        }
+    }
+}

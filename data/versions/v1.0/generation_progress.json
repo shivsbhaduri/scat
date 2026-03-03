@@ -1,0 +1,429 @@
+{
+  "card_payments": {
+    "category": "Card Payments",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T11:40:51.836928"
+  },
+  "bank_transfers_in": {
+    "category": "Bank Transfers In",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T11:43:09.382272"
+  },
+  "platform_payouts": {
+    "category": "Platform Payouts",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:30:05.051147"
+  },
+  "cash_deposits": {
+    "category": "Cash Deposits",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:32:12.423459"
+  },
+  "other_revenue": {
+    "category": "Other Revenue",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:34:19.843487"
+  },
+  "grants_subsidies": {
+    "category": "Grants and Subsidies",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:36:40.408830"
+  },
+  "insurance_claims": {
+    "category": "Insurance Claims Received",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:38:56.150821"
+  },
+  "refunds_received": {
+    "category": "Refunds Received",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:41:05.044665"
+  },
+  "asset_sale_proceeds": {
+    "category": "Asset Sale Proceeds",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:43:20.015763"
+  },
+  "inventory_wholesale": {
+    "category": "Inventory and Wholesale",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:45:33.245317"
+  },
+  "raw_materials": {
+    "category": "Raw Materials and Inputs",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:47:43.732656"
+  },
+  "subcontractors": {
+    "category": "Subcontractors",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:49:49.884152"
+  },
+  "shipping_fulfilment": {
+    "category": "Shipping and Fulfilment",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:52:07.350638"
+  },
+  "platform_fees": {
+    "category": "Platform and Marketplace Fees",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:54:13.371982"
+  },
+  "rent_rates": {
+    "category": "Rent and Rates",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:56:31.243682"
+  },
+  "utilities": {
+    "category": "Utilities",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T13:58:44.041116"
+  },
+  "software_subscriptions": {
+    "category": "Software and Subscriptions",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:00:44.278385"
+  },
+  "telecoms": {
+    "category": "Telecoms and Connectivity",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:02:58.809486"
+  },
+  "accounting_legal": {
+    "category": "Accounting and Legal",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:05:13.671738"
+  },
+  "consulting_advisory": {
+    "category": "Consulting and Advisory",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:07:28.957772"
+  },
+  "marketing_advertising": {
+    "category": "Marketing and Advertising",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:09:39.479702"
+  },
+  "office_admin": {
+    "category": "Office and Administration",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:17:01.357093"
+  },
+  "repairs_maintenance": {
+    "category": "Repairs and Maintenance",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:25:28.158471"
+  },
+  "equipment_tools": {
+    "category": "Equipment and Tools",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:33:36.292775"
+  },
+  "training_memberships": {
+    "category": "Training and Memberships",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T14:41:26.231313"
+  },
+  "travel_accommodation": {
+    "category": "Business Travel and Accommodation",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T15:54:14.111277"
+  },
+  "salaries_wages": {
+    "category": "Salaries and Wages",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:07:33.149073"
+  },
+  "employer_taxes": {
+    "category": "Employer Taxes and Contributions",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:14:51.282181"
+  },
+  "contractors_freelancers": {
+    "category": "Contractors and Freelancers",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:22:56.254579"
+  },
+  "staff_expenses": {
+    "category": "Staff Expenses and Reimbursements",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:32:32.343974"
+  },
+  "benefits_wellbeing": {
+    "category": "Benefits and Wellbeing",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:41:12.181654"
+  },
+  "card_processing_fees": {
+    "category": "Card Processing Fees",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:49:04.495611"
+  },
+  "bank_charges": {
+    "category": "Bank Charges and Fees",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T16:58:33.912957"
+  },
+  "loan_interest": {
+    "category": "Loan Interest and Finance Charges",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T17:08:30.245522"
+  },
+  "fx_fees": {
+    "category": "FX and Cross-Border Fees",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T17:17:25.458182"
+  },
+  "internal_transfers": {
+    "category": "Internal Transfers",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T17:34:32.132493"
+  },
+  "savings_deposits": {
+    "category": "Savings and Deposits",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T17:43:52.893340"
+  },
+  "loan_drawdown": {
+    "category": "Loan and Credit Drawdowns",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-26T17:51:53.975471"
+  },
+  "loan_repayment": {
+    "category": "Loan Repayments",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T05:44:49.723645"
+  },
+  "lease_payments": {
+    "category": "Lease Payments",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T05:54:54.602042"
+  },
+  "asset_purchase": {
+    "category": "Asset Purchases",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:03:34.932172"
+  },
+  "owner_investment": {
+    "category": "Owner Investment and Capital Injections",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:12:25.983872"
+  },
+  "owner_withdrawal": {
+    "category": "Owner Drawings and Dividends",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:20:17.178314"
+  },
+  "vat_payment": {
+    "category": "VAT Payments",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:31:13.025079"
+  },
+  "corporation_tax": {
+    "category": "Corporation Tax",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:38:59.017030"
+  },
+  "paye_hmrc": {
+    "category": "PAYE and Payroll Taxes",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:46:49.631241"
+  },
+  "licences_permits": {
+    "category": "Licences and Permits",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T06:54:13.229038"
+  },
+  "fines_penalties": {
+    "category": "Fines and Penalties",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T07:01:09.483597"
+  },
+  "business_insurance": {
+    "category": "Business Insurance",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T08:26:39.776557"
+  },
+  "vehicle_insurance": {
+    "category": "Vehicle Insurance",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T08:33:37.261376"
+  },
+  "professional_indemnity": {
+    "category": "Professional Indemnity",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T08:40:11.398336"
+  },
+  "fuel": {
+    "category": "Fuel",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T08:48:59.330112"
+  },
+  "vehicle_running_costs": {
+    "category": "Vehicle Running Costs",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T08:57:08.985703"
+  },
+  "courier_delivery": {
+    "category": "Courier and Delivery Services",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T09:26:28.086840"
+  },
+  "vehicle_rental": {
+    "category": "Vehicle Rental and Hire",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T09:35:51.269510"
+  },
+  "refunds_issued": {
+    "category": "Refunds Issued",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T09:43:04.399018"
+  },
+  "chargebacks": {
+    "category": "Chargebacks and Disputes",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T09:50:52.255692"
+  },
+  "reversals": {
+    "category": "Reversals and Corrections",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T09:58:09.803957"
+  },
+  "failed_payments": {
+    "category": "Failed and Returned Payments",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T10:06:34.910027"
+  },
+  "low_confidence": {
+    "category": "Low Confidence Classification",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T10:14:32.326848"
+  },
+  "personal_spend": {
+    "category": "Apparent Personal Spend",
+    "generated": 200,
+    "target": 200,
+    "completed": true,
+    "last_updated": "2026-02-27T10:22:13.183779"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "v1.0",
+  "trained_at": "2026-02-27T11:17:59.355523",
+  "accuracy": 0.9521492295214923,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "qdrant_collection": "transactions_v1.0",
+  "num_features": 135,
+  "num_categories": 61,
+  "signal_stats": {
+    "keyword_features": 53,
+    "regex_features": 8,
+    "composite_features": 10
+  },
+  "direction_rules_count": 73,
+  "exact_lookup_entries": 10562,
+  "categories_with_keywords": 53
+}

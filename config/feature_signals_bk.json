@@ -1,0 +1,659 @@
+{
+    "version": "1.0",
+    "description": "Heuristic feature config derived from SME transaction batch - UK market",
+    "keyword_features": [
+        {
+            "feature_name": "is_card_processor",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "elavon",
+                "paymentsense",
+                "dojo",
+                "stripe",
+                "adyen",
+                "worldpay",
+                "toasttab",
+                "gocardless",
+                "evo payments",
+                "planet treasury",
+                "planetfp"
+            ],
+            "hint_category": "card_payments"
+        },
+        {
+            "feature_name": "is_cash_deposit",
+            "match_type": "starts_with",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "cash deposit at po",
+                "cash deposit hb"
+            ],
+            "hint_category": "cash_deposits"
+        },
+        {
+            "feature_name": "is_hmrc",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hmrc",
+                "cumbernauld",
+                "hmrc ndds",
+                "hmrc shipley",
+                "hmrc vat",
+                "hmrc corp tax"
+            ],
+            "hint_category": "paye_hmrc"
+        },
+        {
+            "feature_name": "is_national_savings",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "national savings",
+                "national savings afp",
+                "fps, national savings"
+            ],
+            "hint_category": "grants_subsidies"
+        },
+        {
+            "feature_name": "is_marketing",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "google ads",
+                "google ads76",
+                "facebk",
+                "facebook",
+                "linkedin",
+                "linkedin sn",
+                "linkedin pre",
+                "tiktok ads",
+                "adroll",
+                "reddit inc ads",
+                "microsoft*advert",
+                "microsoft*advertis"
+            ],
+            "hint_category": "marketing_advertising"
+        },
+        {
+            "feature_name": "is_saas",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "adobe",
+                "zapier",
+                "unbounce",
+                "agorapulse",
+                "tawk.to",
+                "access uk ltd",
+                "lightrics",
+                "twinkl"
+            ],
+            "hint_category": "software_subscriptions"
+        },
+        {
+            "feature_name": "is_telecoms",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bt group",
+                "bt direct debit",
+                "ee limited",
+                "g. network communi",
+                "northern telecom"
+            ],
+            "hint_category": "telecoms"
+        },
+        {
+            "feature_name": "is_insurance",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hiscox",
+                "zurich insurance",
+                "l&g insurance",
+                "lg insurance",
+                "l g insurance",
+                "vitality health",
+                "admiral insurance",
+                "uki t/a churchill",
+                "royal lon-scotlife"
+            ],
+            "hint_category": "business_insurance"
+        },
+        {
+            "feature_name": "is_pension",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "nest pension",
+                "teachers pension",
+                "capita pension",
+                "standard life",
+                "royal lon-scotlife"
+            ],
+            "hint_category": "employer_taxes"
+        },
+        {
+            "feature_name": "is_fx_fee",
+            "match_type": "starts_with",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "fees and expenses for transfer to"
+            ],
+            "hint_category": "fx_fees"
+        },
+        {
+            "feature_name": "is_fx_transfer",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "with exchange rate"
+            ],
+            "hint_category": "fx_fees"
+        },
+        {
+            "feature_name": "is_bank_charge",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "service charges ref",
+                "charges from",
+                "chgs",
+                "debit interest",
+                "total charges",
+                "payment charge",
+                "comm 0"
+            ],
+            "hint_category": "bank_charges"
+        },
+        {
+            "feature_name": "is_lease",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "leaseplan",
+                "ald automotive",
+                "kennet equipment",
+                "grenkeleasing",
+                "mi vehicle finance"
+            ],
+            "hint_category": "lease_payments"
+        },
+        {
+            "feature_name": "is_food_supplier",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bidfood",
+                "bidfresh",
+                "venus wine",
+                "liberty wines",
+                "speciality drinks",
+                "belazu ingredient",
+                "natures choice",
+                "chefly foods",
+                "family butcher",
+                "kff food service",
+                "mustard foods",
+                "paul rhodes bakery",
+                "bread factory",
+                "booker ltd",
+                "london ice",
+                "msk ingredients",
+                "special ingredient",
+                "franconian sau"
+            ],
+            "hint_category": "inventory_wholesale"
+        },
+        {
+            "feature_name": "is_utilities",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "sse energy",
+                "edf energy",
+                "castle water",
+                "boc manchester"
+            ],
+            "hint_category": "utilities"
+        },
+        {
+            "feature_name": "is_rent",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "savills",
+                "fairways property rent",
+                "sophie rutter cottage rent",
+                "prospect estates",
+                "city of westminste"
+            ],
+            "hint_category": "rent_rates"
+        },
+        {
+            "feature_name": "is_cleaning_hygiene",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "zenith hygiene",
+                "cathedral hygiene",
+                "chl cleaning",
+                "jac cleaning",
+                "marshall laundry",
+                "nelson glasswash"
+            ],
+            "hint_category": "office_admin"
+        },
+        {
+            "feature_name": "is_pest_control",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "beaver pest",
+                "south coast pest"
+            ],
+            "hint_category": "repairs_maintenance"
+        },
+        {
+            "feature_name": "is_security",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "p & n security",
+                "tps fire & securit",
+                "direct alarms",
+                "cl security"
+            ],
+            "hint_category": "repairs_maintenance"
+        },
+        {
+            "feature_name": "is_vat_payment",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hmrc vat"
+            ],
+            "hint_category": "vat_payment"
+        },
+        {
+            "feature_name": "is_stamp_duty",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "stamp duty"
+            ],
+            "hint_category": "licences_permits"
+        },
+        {
+            "feature_name": "is_unpaid_dd",
+            "match_type": "starts_with",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "unpaid dd"
+            ],
+            "hint_category": "failed_payments"
+        },
+        {
+            "feature_name": "is_amex_settlement",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bank giro credit ref ax",
+                "american express"
+            ],
+            "hint_category": "card_payments"
+        },
+        {
+            "feature_name": "is_shareholder",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "shareholder lo"
+            ],
+            "hint_category": "owner_withdrawal"
+        },
+        {
+            "feature_name": "is_money_market",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "moneymarket",
+                "stg liquidity",
+                "sterling liquidity"
+            ],
+            "hint_category": "savings_deposits"
+        },
+        {
+            "feature_name": "is_payroll_provider",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "tmf payroll",
+                "eazipay",
+                "coppice payroll",
+                "globalization part"
+            ],
+            "hint_category": "salaries_wages"
+        },
+        {
+            "feature_name": "is_consulting",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "granville consulta",
+                "otto associates",
+                "makedo consulting",
+                "platform81"
+            ],
+            "hint_category": "consulting_advisory"
+        },
+        {
+            "feature_name": "is_training",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "axcis education",
+                "vision for educati",
+                "aim qualifications",
+                "pearson education",
+                "findel education",
+                "browns books",
+                "twinkl",
+                "aqa education",
+                "peters ltd",
+                "cgp customer servi"
+            ],
+            "hint_category": "training_memberships"
+        },
+        {
+            "feature_name": "is_fuel",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "esso refill"
+            ],
+            "hint_category": "fuel"
+        },
+        {
+            "feature_name": "is_delivery_logistics",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "jp man & van",
+                "london hire",
+                "express hire",
+                "courier"
+            ],
+            "hint_category": "courier_delivery"
+        }
+    ],
+    "regex_features": [
+        {
+            "feature_name": "is_internal_transfer_bx",
+            "pattern": "^bx\\d{8}",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "internal_transfers"
+        },
+        {
+            "feature_name": "is_faster_payment_receipt",
+            "pattern": "^faster payments receipt ref\\.",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "bank_transfers_in"
+        },
+        {
+            "feature_name": "is_bank_giro_credit",
+            "pattern": "^bank giro credit ref",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "card_payments"
+        },
+        {
+            "feature_name": "is_advice_confirms",
+            "pattern": "^advice confirms",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "bank_transfers_in"
+        },
+        {
+            "feature_name": "is_direct_debit",
+            "pattern": "^direct debit payment to",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "low_confidence"
+        },
+        {
+            "feature_name": "is_inter_company",
+            "pattern": "inter (acc txf|co cred)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "internal_transfers"
+        },
+        {
+            "feature_name": "has_exchange_rate",
+            "pattern": "exchange rate",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "fx_fees"
+        },
+        {
+            "feature_name": "is_slc_loan",
+            "pattern": "slc loans",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "grants_subsidies"
+        },
+        {
+            "feature_name": "is_council_payment",
+            "pattern": "(county council|city council|city co|borough council|county borou|cc gcf|lb bromley|lb lewisham|surrey cc|kcc payment|bcp council)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "grants_subsidies"
+        },
+        {
+            "feature_name": "is_nhs_payment",
+            "pattern": "(nhs|nhs england|nhs gg|nhs ne|nhs south)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "bank_transfers_in"
+        }
+    ],
+    "composite_features": [
+        {
+            "feature_name": "is_payroll_individual",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "regex",
+                    "pattern": "^[a-z][a-z]+ [a-z][a-z]+( fp \\d{2}/\\d{2}/\\d{2})?$"
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 200,
+                    "max": 5000
+                }
+            ],
+            "hint_category": "salaries_wages"
+        },
+        {
+            "feature_name": "is_hmrc_paye_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "hmrc",
+                        "cumbernauld",
+                        "paye"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                }
+            ],
+            "hint_category": "paye_hmrc"
+        },
+        {
+            "feature_name": "is_corp_tax_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "hmrc corp tax",
+                        "hmrc shipley",
+                        "corporation tax"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                }
+            ],
+            "hint_category": "corporation_tax"
+        },
+        {
+            "feature_name": "is_large_internal_transfer",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "regex",
+                    "pattern": "^bx\\d{8}"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 10000,
+                    "max": 99999999
+                }
+            ],
+            "hint_category": "internal_transfers"
+        },
+        {
+            "feature_name": "is_card_payout_credit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "elavon",
+                        "paymentsense",
+                        "dojo",
+                        "stripe",
+                        "adyen",
+                        "worldpay",
+                        "toasttab"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Credit"
+                }
+            ],
+            "hint_category": "card_payments"
+        },
+        {
+            "feature_name": "is_card_fee_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "dojouk ps",
+                        "evo payments",
+                        "stripe-"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                }
+            ],
+            "hint_category": "card_processing_fees"
+        }
+    ]
+}

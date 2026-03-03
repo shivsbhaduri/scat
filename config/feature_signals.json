@@ -1,0 +1,1493 @@
+{
+    "version": "6.0",
+    "description": "Expanded heuristic features for UK SME transaction classification - added more basic merchants like Deliveroo, Uber, airlines, taxis, restaurants",
+    "keyword_features": [
+        {
+            "feature_name": "is_card_payments_settlement",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "worldpay",
+                "barclaycard merchant",
+                "barclaycard ps",
+                "stripe payout",
+                "stripe transfer",
+                "stripe settlement",
+                "sumup payments",
+                "sumup",
+                "squareup",
+                "square inc",
+                "adyen",
+                "dojo",
+                "paymentsense",
+                "elavon",
+                "opayo",
+                "checkout.com",
+                "nomupay",
+                "gocardless direct",
+                "paypal *payout",
+                "evo payments",
+                "tsys merchant",
+                "lloyds cardnet",
+                "global payments",
+                "zettle",
+                "klarna merchant",
+                "takepayments"
+            ],
+            "hint_category": "card_payments",
+            "confidence": 0.97
+        },
+        {
+            "feature_name": "is_platform_payouts",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "amazon seller",
+                "amazon eu sarl",
+                "amazon payouts",
+                "amazon settlement",
+                "ebay managed payments",
+                "ebay payment",
+                "shopify payments",
+                "deliveroo payments",
+                "uber eats transfer",
+                "just eat payout",
+                "etsy payment",
+                "depop payout",
+                "paypal transfer payout",
+                "wix payments",
+                "bolt checkout",
+                "gumroad",
+                "uber payout",
+                "deliveroo settlement"
+            ],
+            "hint_category": "platform_payouts",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_cash_deposits",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "cash deposit",
+                "counter deposit",
+                "branch deposit",
+                "atm deposit",
+                "po deposit",
+                "till deposit",
+                "daily takings",
+                "cash lodgement",
+                "barclays cash",
+                "lloyds cash deposit",
+                "natwest cash in"
+            ],
+            "hint_category": "cash_deposits",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_bank_transfers_in_revenue",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "fp from",
+                "faster payment from",
+                "bacs credit",
+                "customer payment",
+                "invoice paid",
+                "chaps credit",
+                "fps receipt",
+                "bacs from",
+                "faster payments receipt",
+                "customer bacs",
+                "transfer in customer"
+            ],
+            "hint_category": "bank_transfers_in",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_other_revenue",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "commission received",
+                "referral fee",
+                "affiliate payment",
+                "service fee income",
+                "licence fee",
+                "royalty received",
+                "rebate received",
+                "bonus received trading",
+                "misc income"
+            ],
+            "hint_category": "other_revenue",
+            "confidence": 0.85
+        },
+        {
+            "feature_name": "is_grants_subsidies",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hmrc grant",
+                "r&d tax credit",
+                "innovate uk",
+                "local authority grant",
+                "small business grant",
+                "bounce back",
+                "cbils",
+                "levelling up",
+                "se grant",
+                "welsh government grant",
+                "scottish enterprise"
+            ],
+            "hint_category": "grants_subsidies",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_insurance_claims",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "aviva claim",
+                "axa claim",
+                "zurich claim",
+                "hiscox settlement",
+                "claim payment",
+                "insurance payout",
+                "allianz claim",
+                "nfum claim",
+                "direct line claim",
+                "lv claim"
+            ],
+            "hint_category": "insurance_claims",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_asset_sale_proceeds",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "vehicle sale",
+                "equipment sale",
+                "asset disposal",
+                "sale of machinery",
+                "van sale",
+                "webuyanycar",
+                "autotrader sale",
+                "machinery sale proceeds",
+                "furniture disposal"
+            ],
+            "hint_category": "asset_sale_proceeds",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_inventory_wholesale",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "booker",
+                "brakes",
+                "bidfood",
+                "costco wholesale",
+                "makro",
+                "sysco",
+                "chefly foods",
+                "speciality drinks",
+                "venus wine",
+                "belazu",
+                "natures choice",
+                "jj foodservice",
+                "tesco wholesale"
+            ],
+            "hint_category": "inventory_wholesale",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_raw_materials",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "packaging supplies",
+                "ingredient co",
+                "materials direct",
+                "raw materials purchase",
+                "consumables",
+                "production inputs",
+                "chemical supplies",
+                "fabric purchase",
+                "metal sheets"
+            ],
+            "hint_category": "raw_materials",
+            "confidence": 0.88
+        },
+        {
+            "feature_name": "is_subcontractors",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "subcontractor",
+                "cis deduction",
+                "freelance payment",
+                "contract work",
+                "plumbing",
+                "electrical",
+                "builders",
+                "carpenter",
+                "welder payment",
+                "scaffolding hire labour",
+                "roofer payment"
+            ],
+            "hint_category": "subcontractors",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_shipping_fulfilment",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "royal mail",
+                "dpd",
+                "evri",
+                "hermes",
+                "yodel",
+                "parcelforce",
+                "amazon logistics",
+                "dhl parcel",
+                "ups delivery",
+                "shipping charge",
+                "fulfilment fee",
+                "fedex uk"
+            ],
+            "hint_category": "shipping_fulfilment",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_platform_fees",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "amazon seller fees",
+                "ebay final value",
+                "etsy transaction fee",
+                "deliveroo commission",
+                "just eat service",
+                "shopify fee",
+                "wix fee",
+                "marketplace commission",
+                "uber eats fee"
+            ],
+            "hint_category": "platform_fees",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_rent_rates",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "rent payment",
+                "commercial rent",
+                "business rates",
+                "council rates",
+                "westminster council",
+                "savills rent",
+                "fairways rent",
+                "manchester council rates",
+                "london borough rates",
+                "leeds council rates"
+            ],
+            "hint_category": "rent_rates",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_utilities",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "british gas",
+                "edf energy",
+                "octopus energy",
+                "sse energy",
+                "e.on next",
+                "scottish power",
+                "thames water",
+                "severn trent",
+                "united utilities",
+                "castle water",
+                "essex water",
+                "yorkshire water"
+            ],
+            "hint_category": "utilities",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_software_subscriptions",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "xero sub",
+                "quickbooks",
+                "sage",
+                "microsoft 365",
+                "adobe creative",
+                "zoom.us",
+                "slack",
+                "google workspace",
+                "hubspot",
+                "salesforce",
+                "notion",
+                "canva",
+                "figma",
+                "zapier",
+                "asana",
+                "trello",
+                "monday.com",
+                "atlassian jira"
+            ],
+            "hint_category": "software_subscriptions",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_telecoms",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bt business",
+                "ee limited",
+                "vodafone business",
+                "o2 uk",
+                "three uk",
+                "virgin media business",
+                "sky business broadband",
+                "talktalk business",
+                "zen internet",
+                "plusnet business"
+            ],
+            "hint_category": "telecoms",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_accounting_legal",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "accountant fee",
+                "bookkeeping",
+                "audit fee",
+                "legal fees",
+                "solicitor",
+                "tax advice",
+                "vat specialist",
+                "hmrc advisor",
+                "payroll services",
+                "kpmg fee"
+            ],
+            "hint_category": "accounting_legal",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_consulting_advisory",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "consultant fee",
+                "business advisor",
+                "management consultant",
+                "hr services",
+                "recruitment fee",
+                "granville",
+                "otto associates",
+                "makedo consulting",
+                "platform81",
+                "deloitte",
+                "pwc advisory",
+                "ey consulting"
+            ],
+            "hint_category": "consulting_advisory",
+            "confidence": 0.89
+        },
+        {
+            "feature_name": "is_marketing_advertising",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "google ads",
+                "meta platforms",
+                "facebook ads",
+                "instagram ads",
+                "linkedin advertising",
+                "tiktok ads",
+                "snapchat ads",
+                "pinterest ads",
+                "reddit ads",
+                "outbrain",
+                "taboola",
+                "hootsuite"
+            ],
+            "hint_category": "marketing_advertising",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_office_admin",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "amazon business",
+                "viking direct",
+                "staples",
+                "office supplies",
+                "stationery",
+                "postage royal mail",
+                "printer ink",
+                "paper purchase",
+                "tesco office",
+                "sainsburys supplies"
+            ],
+            "hint_category": "office_admin",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_repairs_maintenance",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "repairs",
+                "maintenance",
+                "plumbing repair",
+                "electrical work",
+                "building repair",
+                "property maintenance",
+                "zenith hygiene",
+                "cathedral hygiene",
+                "boiler service",
+                "locksmith"
+            ],
+            "hint_category": "repairs_maintenance",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_equipment_tools",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "screwfix",
+                "toolstation",
+                "machine mart",
+                "rs components",
+                "equipment purchase",
+                "tools buy",
+                "cpc farnell",
+                "tool hire small",
+                "wickes tools"
+            ],
+            "hint_category": "equipment_tools",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_training_memberships",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "training course",
+                "professional membership",
+                "accreditation fee",
+                "cpd training",
+                "fsb membership",
+                "chamber commerce",
+                "acca fee",
+                "cima sub",
+                "iosh training",
+                "cips membership",
+                "bcs membership"
+            ],
+            "hint_category": "training_memberships",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_travel_accommodation",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "trainline",
+                "lner ticket",
+                "gwr",
+                "premier inn",
+                "travelodge",
+                "british airways",
+                "easyjet",
+                "uber trip business",
+                "bolt trip",
+                "hilton hotels",
+                "ryanair",
+                "wizz air",
+                "virgin atlantic",
+                "emirates",
+                "addison lee taxi",
+                "uber taxi",
+                "free now taxi"
+            ],
+            "hint_category": "travel_accommodation",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_salaries_wages",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "salary",
+                "wages",
+                "payroll",
+                "net pay",
+                "bacs salary",
+                "staff payment",
+                "monthly salary",
+                "weekly wages",
+                "brightpay payroll",
+                "cintra payroll"
+            ],
+            "hint_category": "salaries_wages",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_employer_taxes",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "nest pension",
+                "now pensions",
+                "employer ni",
+                "hmrc employer",
+                "pension contribution",
+                "standard life pension",
+                "scottish widows",
+                "cintra pension",
+                "aviva employer"
+            ],
+            "hint_category": "employer_taxes",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_contractors_freelancers",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "contractor",
+                "freelancer",
+                "consultancy fee",
+                "agency worker",
+                "ir35",
+                "reed",
+                "hays",
+                "manpower",
+                "upwork payment",
+                "people per hour"
+            ],
+            "hint_category": "contractors_freelancers",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_staff_expenses",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "expense claim",
+                "staff reimbursement",
+                "mileage claim",
+                "travel claim",
+                "subsistence claim",
+                "employee expenses",
+                "business lunch",
+                "mcdonalds staff",
+                "nandos meal",
+                "pizza hut reimbursement"
+            ],
+            "hint_category": "staff_expenses",
+            "confidence": 0.89
+        },
+        {
+            "feature_name": "is_benefits_wellbeing",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bupa healthcare",
+                "axa health",
+                "vitality",
+                "cycle to work",
+                "employee benefits",
+                "wellness scheme",
+                "private medical",
+                "gym membership staff",
+                "headspace sub"
+            ],
+            "hint_category": "benefits_wellbeing",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_card_processing_fees",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "stripe fees",
+                "worldpay fees",
+                "sumup fee",
+                "card processing charge",
+                "merchant service charge",
+                "msc",
+                "barclaycard fees",
+                "dojo fees",
+                "adyen fees",
+                "checkout fee"
+            ],
+            "hint_category": "card_processing_fees",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_bank_charges",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "bank charges",
+                "account fee",
+                "overdraft fee",
+                "service charge",
+                "unpaid item fee",
+                "monthly fee",
+                "transaction charge",
+                "starling fee",
+                "tide charge",
+                "monzo business fee"
+            ],
+            "hint_category": "bank_charges",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_loan_interest",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "loan interest",
+                "od interest",
+                "debit interest",
+                "finance charge",
+                "funding circle interest",
+                "iwoca fee",
+                "bibby interest",
+                "close brothers interest",
+                "santander interest"
+            ],
+            "hint_category": "loan_interest",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_fx_fees",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "fx fee",
+                "foreign exchange charge",
+                "currency conversion",
+                "international payment fee",
+                "cross border charge",
+                "exchange rate fee",
+                "wise fee",
+                "revolut fx",
+                "transferwise charge"
+            ],
+            "hint_category": "fx_fees",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_internal_transfers",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "internal transfer",
+                "acc transfer",
+                "sweep to savings",
+                "transfer to reserve",
+                "own account transfer",
+                "inter account"
+            ],
+            "hint_category": "internal_transfers",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_loan_drawdown",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "loan advance",
+                "drawdown",
+                "funding circle",
+                "iwoca",
+                "merchant cash advance",
+                "capify",
+                "marketfinance",
+                "thin cats loan",
+                "novuna finance"
+            ],
+            "hint_category": "loan_drawdown",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_loan_repayment",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "loan repayment",
+                "principal repayment",
+                "dd loan",
+                "credit repayment",
+                "hp payment",
+                "finance repayment",
+                "monthly loan dd"
+            ],
+            "hint_category": "loan_repayment",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_lease_payments",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "leaseplan",
+                "ald automotive",
+                "hitachi capital",
+                "close brothers",
+                "lombard",
+                "black horse",
+                "lex autolease",
+                "arval",
+                "alphabet lease",
+                "santander lease",
+                "novuna lease"
+            ],
+            "hint_category": "lease_payments",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_asset_purchase",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "vehicle purchase",
+                "equipment purchase",
+                "machinery buy",
+                "capital investment",
+                "fit out",
+                "computer equipment",
+                "van buy",
+                "forklift purchase",
+                "office fitout"
+            ],
+            "hint_category": "asset_purchase",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_owner_investment",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "director loan in",
+                "capital injection",
+                "owner investment",
+                "shareholder funding",
+                "director credit",
+                "equity injection",
+                "founder capital"
+            ],
+            "hint_category": "owner_investment",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_owner_withdrawal",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "drawings",
+                "dividend payment",
+                "director transfer out",
+                "personal transfer",
+                "owner withdrawal",
+                "dividend bacs",
+                "director drawings"
+            ],
+            "hint_category": "owner_withdrawal",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_vat_payment",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hmrc vat",
+                "vat payment",
+                "vat return payment",
+                "value added tax",
+                "vat q",
+                "vat period",
+                "hmrc vat qtr",
+                "vat monthly"
+            ],
+            "hint_category": "vat_payment",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_corporation_tax",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "corporation tax",
+                "hmrc ct",
+                "ct600 payment",
+                "company tax payment",
+                "hmrc shipley ct",
+                "corp tax dd"
+            ],
+            "hint_category": "corporation_tax",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_paye_hmrc",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "hmrc paye",
+                "paye payment",
+                "rti payment",
+                "hmrc rti",
+                "payroll tax",
+                "employee ni hmrc",
+                "hmrc cumbernauld paye",
+                "paye monthly"
+            ],
+            "hint_category": "paye_hmrc",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_licences_permits",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "licence fee",
+                "alcohol licence",
+                "premises licence",
+                "food hygiene",
+                "taxi licence",
+                "dvla fee",
+                "gun licence",
+                "planning fee",
+                "environmental permit"
+            ],
+            "hint_category": "licences_permits",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_business_insurance",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "aviva business",
+                "axa commercial",
+                "hiscox premium",
+                "zurich insurance",
+                "simply business",
+                "vitality health",
+                "admiral van",
+                "nfum",
+                "direct line commercial",
+                "allianz business",
+                "lv insurance"
+            ],
+            "hint_category": "business_insurance",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_fuel",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "shell",
+                "bp",
+                "esso",
+                "texaco",
+                "asda fuel",
+                "tesco fuel",
+                "allstar fuel",
+                "uk fuels",
+                "keyfuels",
+                "shell card",
+                "bp pulse",
+                "morrisons fuel"
+            ],
+            "hint_category": "fuel",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_vehicle_running_costs",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "mot test",
+                "vehicle service",
+                "kwik fit",
+                "halfords autocentre",
+                "dvla road tax",
+                "congestion charge",
+                "dartford crossing",
+                "parking charge business",
+                "tyre replacement",
+                "windscreen repair"
+            ],
+            "hint_category": "vehicle_running_costs",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_courier_delivery",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "dhl express",
+                "ups courier",
+                "fedex",
+                "citysprint",
+                "courier service",
+                "same day delivery",
+                "tuffnells",
+                "palletways",
+                "deliveroo courier",
+                "uber delivery"
+            ],
+            "hint_category": "courier_delivery",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_vehicle_rental",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "enterprise rent",
+                "hertz rental",
+                "europcar",
+                "sixt",
+                "avis van hire",
+                "vehicle rental",
+                "van hire weekly",
+                "keddy",
+                "thrifty car hire"
+            ],
+            "hint_category": "vehicle_rental",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_refunds_issued",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "refund to customer",
+                "customer refund",
+                "return refund",
+                "refund payment",
+                "credit note issued",
+                "refund issued",
+                "reversal refund"
+            ],
+            "hint_category": "refunds_issued",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_chargebacks",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "chargeback",
+                "disputed transaction",
+                "payment dispute",
+                "reversal chargeback",
+                "stripe chargeback",
+                "paypal dispute"
+            ],
+            "hint_category": "chargebacks",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_failed_payments",
+            "match_type": "any_contains",
+            "fields": [
+                "description"
+            ],
+            "keywords": [
+                "unpaid dd",
+                "dd returned",
+                "failed payment",
+                "refer to drawer",
+                "insufficient funds",
+                "dd indemnity",
+                "returned direct debit",
+                "bounced payment"
+            ],
+            "hint_category": "failed_payments",
+            "confidence": 0.94
+        }
+    ],
+    "regex_features": [
+        {
+            "feature_name": "is_faster_payments_receipt",
+            "pattern": "(^fp from|faster payments rec|faster pay rec|fps credit|fp receipt|from .* fp|faster payment received|fps from|faster credit)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "bank_transfers_in",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_internal_transfer",
+            "pattern": "^(bx\\d{6,10}|int xfer|internal transfer|acc txf|transfer to .* acc|\\d{8} int|internal sweep|own acc|inter acc)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "internal_transfers",
+            "confidence": 0.91
+        },
+        {
+            "feature_name": "is_hmrc_vat_quarterly",
+            "pattern": "(vat (q[1-4]|\\d{2}/\\d{2}|period \\d{4}|qtr)|hmrc vat \\d{4}|vat return \\d{4}|vat q\\d \\d{4}|vat monthly \\d{4})",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "vat_payment",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_payroll_name_pattern",
+            "pattern": "^[a-z]+ [a-z]+( fp \\d{2}/\\d{2}/\\d{2})?$|^[a-z]+ [a-z]+ salary|^salary to|^wages|^payroll bacs|^bacs net pay|^pay to [a-z]+",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "salaries_wages",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_lease_hp_payment",
+            "pattern": "(lease|hp|hire purchase|finance instalment) (\\d{6}|ref \\d+|dd \\d+|monthly)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "lease_payments",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_invoice_payment_received",
+            "pattern": "(inv|invoice) (\\d{4,8}|ref \\d+) paid|paid inv|inv \\d+ settled|invoice receipt \\d+",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "bank_transfers_in",
+            "confidence": 0.89
+        },
+        {
+            "feature_name": "is_settlement_batch",
+            "pattern": "(settlement|batch|pay out) (\\d{6,10}|ref \\d+|daily|weekly)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "card_payments",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_expense_claim_ref",
+            "pattern": "(exp|claim|reimb) (\\d{4}|ref \\d+)",
+            "fields": [
+                "description"
+            ],
+            "hint_category": "staff_expenses",
+            "confidence": 0.90
+        }
+    ],
+    "composite_features": [
+        {
+            "feature_name": "is_card_settlement_credit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "worldpay",
+                        "stripe",
+                        "sumup",
+                        "barclaycard",
+                        "dojo",
+                        "adyen",
+                        "checkout",
+                        "zettle",
+                        "klarna"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Credit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "greater_than",
+                    "value": 100
+                }
+            ],
+            "hint_category": "card_payments",
+            "confidence": 0.98
+        },
+        {
+            "feature_name": "is_card_fee_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "fee",
+                        "charge",
+                        "msc",
+                        "processing",
+                        "stripe fee",
+                        "worldpay fee",
+                        "dojo fee"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 5,
+                    "max": 1500
+                }
+            ],
+            "hint_category": "card_processing_fees",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_salary_wages_debit_typical",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "regex",
+                    "pattern": "[a-z]+ [a-z]+|^salary|^wages|^payroll|^net pay|^bacs salary"
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 600,
+                    "max": 5500
+                }
+            ],
+            "hint_category": "salaries_wages",
+            "confidence": 0.94
+        },
+        {
+            "feature_name": "is_vat_quarterly_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "hmrc vat",
+                        "vat payment",
+                        "vat return",
+                        "vat qtr"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "greater_than",
+                    "value": 400
+                }
+            ],
+            "hint_category": "vat_payment",
+            "confidence": 0.97
+        },
+        {
+            "feature_name": "is_paye_rti_monthly_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "hmrc paye",
+                        "paye",
+                        "rti",
+                        "employer ni",
+                        "payroll tax"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 200,
+                    "max": 10000
+                }
+            ],
+            "hint_category": "paye_hmrc",
+            "confidence": 0.96
+        },
+        {
+            "feature_name": "is_capex_large_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "vehicle",
+                        "equipment",
+                        "machinery",
+                        "capital",
+                        "fit out",
+                        "van buy"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "greater_than",
+                    "value": 2500
+                }
+            ],
+            "hint_category": "asset_purchase",
+            "confidence": 0.93
+        },
+        {
+            "feature_name": "is_loan_or_grant_large_credit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "loan advance",
+                        "drawdown",
+                        "grant",
+                        "r&d credit",
+                        "capital injection",
+                        "bounce back"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Credit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "greater_than",
+                    "value": 4000
+                }
+            ],
+            "hint_category": "loan_drawdown",
+            "confidence": 0.95
+        },
+        {
+            "feature_name": "is_owner_drawings_dividend_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "drawings",
+                        "dividend",
+                        "director transfer",
+                        "personal transfer",
+                        "owner withdrawal"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                }
+            ],
+            "hint_category": "owner_withdrawal",
+            "confidence": 0.92
+        },
+        {
+            "feature_name": "is_travel_expense_debit_small",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "uber",
+                        "bolt",
+                        "british airways",
+                        "easyjet",
+                        "ryanair",
+                        "trainline",
+                        "premier inn"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "between",
+                    "min": 10,
+                    "max": 500
+                }
+            ],
+            "hint_category": "travel_accommodation",
+            "confidence": 0.90
+        },
+        {
+            "feature_name": "is_staff_meal_reimbursement_debit",
+            "conditions": [
+                {
+                    "field": "description",
+                    "match_type": "any_contains",
+                    "keywords": [
+                        "mcdonalds",
+                        "nandos",
+                        "pizza hut",
+                        "subsistence",
+                        "business lunch"
+                    ]
+                },
+                {
+                    "field": "transaction_type",
+                    "match_type": "equals",
+                    "value": "Debit"
+                },
+                {
+                    "field": "amount",
+                    "match_type": "less_than",
+                    "value": 100
+                }
+            ],
+            "hint_category": "staff_expenses",
+            "confidence": 0.88
+        }
+    ]
+}

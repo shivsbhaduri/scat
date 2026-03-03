@@ -1,0 +1,24 @@
+# OpenRouter Configuration
+openrouter:
+  api_key: "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"  # Replace with your actual key
+  model: "qwen/qwen3.5-27b"  # or "anthropic/claude-3-haiku" for cheaper
+  base_url: "https://openrouter.ai/api/v1"
+
+# Generation Settings
+generation:
+  default_samples_per_category: 200
+  default_batch_size: 10
+  account_pool_size: 20
+
+# Model Training Settings
+training:
+  test_split: 0.2
+  random_seed: 42
+
+# Classification Thresholds
+thresholds:
+  hybrid_confidence: 0.75
+  llm_fallback: 0.60
+
+# Versioning
+default_version: "v1.0"
